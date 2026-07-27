@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spesial Untuk Bubu ❤️</title>
+
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+      /* RESET & CORE STYLES */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          #ff9a9e 0%,
+          #fecfef 50%,
+          #feada6 100%
+        );
+        background-size: 200% 200%;
+        animation: gradientBG 10s ease infinite;
+        overflow-x: hidden;
+        position: relative;
+        transition: background 0.8s ease;
+        padding: 20px 0;
+      }
+
+      body.dark-mode {
+        background: linear-gradient(
+          135deg,
+          #2b1055 0%,
+          #7597de 50%,
+          #1b1035 100%
+        );
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* BUBBLE HEART BACKGROUND ANIMATION */
+      .bg-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .heart-bg {
+        position: absolute;
+        bottom: -50px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 24px;
+        animation: floatUp 7s linear infinite;
+        user-select: none;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) rotate(0deg) scale(0.8);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-105vh) rotate(360deg) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* CARD CONTAINER WITH 3D TILT EFFECT */
+      .card-wrapper {
+        perspective: 1000px;
+        z-index: 10;
+        width: 90%;
+        max-width: 420px;
+      }
+
+      .card-container {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 30px 22px;
+        border-radius: 28px;
+        box-shadow:
+          0 20px 40px rgba(230, 80, 115, 0.3),
+          inset 0 0 15px rgba(255, 255, 255, 0.6);
+        text-align: center;
+        width: 100%;
+        border: 3px solid rgba(255, 255, 255, 0.9);
+        transition:
+          transform 0.1s ease-out,
+          background 0.5s ease;
+        transform-style: preserve-3d;
+        animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+
+      body.dark-mode .card-container {
+        background: rgba(30, 20, 50, 0.85);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+
+      @keyframes popIn {
+        from {
+          transform: scale(0.8) translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1) translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* MOOD SELECTOR */
+      .mood-title {
+        font-size: 13px;
+        color: #ff4b72;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      body.dark-mode .mood-title {
+        color: #ff85a1;
+      }
+
+      .mood-options {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .mood-btn {
+        background: #ffe6eb;
+        border: none;
+        font-size: 20px;
+        padding: 6px 12px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .mood-btn:hover,
+      .mood-btn.active {
+        transform: scale(1.2) rotate(8deg);
+        background: #ff4b72;
+        box-shadow: 0 4px 10px rgba(255, 75, 114, 0.3);
+      }
+
+      /* LOVE PROGRESS BAR */
+      .progress-box {
+        margin-bottom: 15px;
+      }
+
+      .progress-label {
+        font-size: 11px;
+        font-weight: bold;
+        color: #777;
+        margin-bottom: 4px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      body.dark-mode .progress-label {
+        color: #bbb;
+      }
+
+      .progress-bar-bg {
+        width: 100%;
+        height: 10px;
+        background: #ffd1dc;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #ff4b72, #ff85a1);
+        border-radius: 10px;
+        transition: width 0.3s ease;
+      }
+
+      /* ILLUSTRATION / EMOJI */
+      .avatar {
+        font-size: 65px;
+        margin-bottom: 5px;
+        display: inline-block;
+        animation: bounce 2s infinite ease-in-out;
+        filter: drop-shadow(0 8px 15px rgba(255, 75, 114, 0.25));
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.1s;
+      }
+
+      .avatar:active {
+        transform: scale(1.3) rotate(-10deg) !important;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      /* TYPOGRAPHY */
+      h1 {
+        color: #ff4b72;
+        font-size: 22px;
+        margin-bottom: 8px;
+        font-weight: 800;
+      }
+
+      body.dark-mode h1 {
+        color: #ff85a1;
+      }
+
+      p.message {
+        color: #555;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 22px;
+        transition: color 0.3s ease;
+      }
+
+      body.dark-mode p.message {
+        color: #ddd;
+      }
+
+      /* BUTTONS */
+      .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #ff4b72 0%, #ff6b8b 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 700;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(255, 75, 114, 0.35);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        user-select: none;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(255, 75, 114, 0.5);
+      }
+
+      .btn-run {
+        background: #f1f2f6;
+        color: #747d8c;
+        box-shadow: none;
+        font-size: 13px;
+        padding: 10px;
+      }
+
+      body.dark-mode .btn-run {
+        background: rgba(255, 255, 255, 0.15);
+        color: #ccc;
+      }
+
+      /* SURPRISE ENVELOPE BOX */
+      .surprise-box {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        margin-top: 0;
+        padding: 0 15px;
+        background: #fff0f3;
+        border: 2px dashed #ffb3c1;
+        border-radius: 18px;
+        color: #c9184a;
+        font-size: 13.5px;
+        line-height: 1.5;
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        transform: scale(0.8);
+      }
+
+      body.dark-mode .surprise-box {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffcbd5;
+      }
+
+      .surprise-box.show {
+        max-height: 250px;
+        opacity: 1;
+        margin-top: 15px;
+        padding: 15px;
+        transform: scale(1);
+      }
+
+      /* CURSOR TRAIL ANIMATION */
+      .trail-heart {
+        position: fixed;
+        pointer-events: none;
+        font-size: 18px;
+        animation: fadeOut 1s forwards;
+        z-index: 9999;
+      }
+
+      @keyframes fadeOut {
+        0% {
+          transform: scale(1) translateY(0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.3) translateY(-30px);
+          opacity: 0;
+        }
+      }
+
+      /* FLOATING PLUS NUMBER */
+      .float-num {
+        position: absolute;
+        color: #ff4b72;
+        font-weight: bold;
+        font-size: 16px;
+        pointer-events: none;
+        animation: floatUpNum 0.8s ease-out forwards;
+      }
+
+      @keyframes floatUpNum {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-35px);
+        }
+      }
+
+      /* FIXED CONTROLS (THEME/MUSIC) */
+      .fixed-widgets {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        gap: 10px;
+        z-index: 100;
+      }
+
+      .widget-btn {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #ff4b72;
+        color: #ff4b72;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+      }
+
+      .widget-btn:hover {
+        transform: scale(1.15) rotate(10deg);
+        background: #ff4b72;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- BACKGROUND ANIMATION -->
+    <div class="bg-hearts" id="bgHearts"></div>
+
+    <!-- KARTU UCAPAN WITH TILT -->
+    <div class="card-wrapper" id="cardWrapper">
+      <div class="card-container" id="cardContainer">
+        <!-- 1. Mood Selector -->
+        <div class="mood-title">Bagaimana mood Bubu hari ini? 💭</div>
+        <div class="mood-options">
+          <button class="mood-btn" onclick="setMood('happy', '😊')">😊</button>
+          <button class="mood-btn" onclick="setMood('tired', '🥺')">🥺</button>
+          <button class="mood-btn" onclick="setMood('love', '🥰')">🥰</button>
+          <button class="mood-btn" onclick="setMood('sleepy', '😴')">😴</button>
+        </div>
+
+        <!-- 2. Avatar & Progress Bar Cinta -->
+        <div class="progress-box">
+          <div class="progress-label">
+            <span>Dosis Pelukan Hari Ini:</span>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+          </div>
+        </div>
+
+        <div class="avatar-wrapper">
+          <div class="avatar" id="avatarBtn" onclick="clickAvatar(event)">
+            🧸💖
+          </div>
+        </div>
+
+        <h1 id="mainTitle">Awoo Bubu Sayang!</h1>
+
+        <p class="message" id="mainMessage">
+          Cuma mau ngingetin kalau kamu itu berharga banget buat aku. Makasih ya
+          udah selalu ada dan bikin hari-hariku jauh lebih berwarna! 🌸✨
+        </p>
+
+        <!-- 3. Action Buttons -->
+        <div class="btn-group">
+          <button class="btn" id="loveBtn" onclick="toggleSurprise(event)">
+            Klik Kalau Sayang Aku 💌
+          </button>
+          <button
+            class="btn btn-run"
+            id="runBtn"
+            onmouseover="runAway()"
+            onclick="runAway()"
+          >
+            Enggak Sayang 😜
+          </button>
+        </div>
+
+        <!-- PESAN RAHASIA -->
+        <div class="surprise-box" id="surpriseBox">
+          🎉 <strong>Yeay! Love You More!</strong> <br /><br />
+          Pokoknya jangan lupa makan, jangan terlalu capek, dan ingat kalau aku
+          bakal selalu dukung kamu dari sini! Aku sayang kamu banget! 🥰🫶
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROL WIDGETS -->
+    <div class="fixed-widgets">
+      <button class="widget-btn" onclick="toggleTheme()" title="Ubah Tema">
+        🌙
+      </button>
+      <button
+        class="widget-btn"
+        id="musicBtn"
+        onclick="toggleMusic()"
+        title="Putar Lagu"
+      >
+        🎵
+      </button>
+    </div>
+
+    <!-- GANTI SRC DI BAWAH INI DENGAN NAMA FILE MP3 KAMU -->
+    <audio
+      id="bgMusic"
+      loop
+      src="c:\Users\ASUS\Music\kau adalah orang favoritku.mp3"
+    ></audio>
+
+    <script>
+      // 1. MOOD SELECTOR & INTERAKSI PESAN DYNAMIC
+      const moodResponses = {
+        happy:
+          "Senang banget liat Bubu senyum hari ini! Tetap semangat ya sayang! 😄✨",
+        tired:
+          "Puk puk... Capek ya hari ini? Istirahat dulu ya, aku selalu ada di sini buat kamu 🥺❤️",
+        love: "Ututu cayang! Aku juga makin sayang sama kamu tiap hari! 🥰💖",
+        sleepy:
+          "Jangan tidur kemalaman ya sayang, istirahat yang cukup biar besok seger! 😴☁️",
+      };
+
+      function setMood(type, emoji) {
+        document
+          .querySelectorAll(".mood-btn")
+          .forEach((b) => b.classList.remove("active"));
+        event.target.classList.add("active");
+
+        document.getElementById("mainMessage").innerText = moodResponses[type];
+        document.getElementById("avatarBtn").innerText = `🧸${emoji}`;
+
+        confetti({
+          particleCount: 15,
+          spread: 40,
+          origin: { y: 0.6 },
+        });
+      }
+
+      // 2. LOVE PROGRESS BAR & CLICK COUNTER
+      let progress = 0;
+      function clickAvatar(e) {
+        if (progress < 100) {
+          progress += 10;
+          document.getElementById("progressBar").style.width = progress + "%";
+          document.getElementById("progressPercent").innerText = progress + "%";
+        }
+
+        if (progress === 100) {
+          document.getElementById("progressPercent").innerText =
+            "100% Full Love! ❤️";
+          triggerMegaConfetti();
+        }
+
+        // Floating text effect
+        const num = document.createElement("div");
+        num.classList.add("float-num");
+        num.innerText = "+10% Hugs 🫂";
+        num.style.left = e.clientX - 20 + "px";
+        num.style.top = e.clientY - 20 + "px";
+        document.body.appendChild(num);
+
+        setTimeout(() => num.remove(), 800);
+      }
+
+      // 3. TOMBOL KABUR + CHANGE TEXT
+      const runTexts = [
+        "Enggak Sayang 😜",
+        "Yakin nih? 🥺",
+        "Tega banget! 😭",
+        "Gak bisa dipencet wkwk 🤪",
+        "Tetep Sayang Dong! ❤️",
+      ];
+      let runTextIdx = 0;
+
+      function runAway() {
+        const btn = document.getElementById("runBtn");
+        const x = Math.random() * (window.innerWidth - 120);
+        const y = Math.random() * (window.innerHeight - 50);
+
+        btn.style.position = "fixed";
+        btn.style.left = x + "px";
+        btn.style.top = y + "px";
+        btn.style.zIndex = "1000";
+
+        runTextIdx = (runTextIdx + 1) % runTexts.length;
+        btn.innerText = runTexts[runTextIdx];
+      }
+
+      // 4. CURSOR TRAIL EFFECT
+      const heartIcons = ["💖", "✨", "🌸", "💕", "❤️"];
+      document.addEventListener("mousemove", function (e) {
+        if (Math.random() < 0.15) {
+          const heart = document.createElement("div");
+          heart.classList.add("trail-heart");
+          heart.innerText =
+            heartIcons[Math.floor(Math.random() * heartIcons.length)];
+          heart.style.left = e.clientX + "px";
+          heart.style.top = e.clientY + "px";
+          document.body.appendChild(heart);
+
+          setTimeout(() => heart.remove(), 1000);
+        }
+      });
+
+      // 5. CARD TILT 3D
+      const wrapper = document.getElementById("cardWrapper");
+      const card = document.getElementById("cardContainer");
+
+      wrapper.addEventListener("mousemove", (e) => {
+        const rect = wrapper.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        card.style.transform = `rotateX(${-y / 20}deg) rotateY(${x / 20}deg)`;
+      });
+
+      wrapper.addEventListener("mouseleave", () => {
+        card.style.transform = "rotateX(0deg) rotateY(0deg)";
+      });
+
+      // 6. SURPRISE BOX & CONFETTI
+      let isRevealed = false;
+      function toggleSurprise(event) {
+        const box = document.getElementById("surpriseBox");
+        const btn = document.getElementById("loveBtn");
+
+        isRevealed = !isRevealed;
+
+        if (isRevealed) {
+          box.classList.add("show");
+          btn.innerText = "Sembunyikan Pesan 🙈";
+          triggerMegaConfetti();
+        } else {
+          box.classList.remove("show");
+          btn.innerText = "Klik Kalau Sayang Aku 💌";
+        }
+      }
+
+      function triggerMegaConfetti() {
+        const duration = 2 * 1000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+          confetti({
+            particleCount: 4,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ["#ff4b72", "#ffe6e8", "#ffffff"],
+          });
+          confetti({
+            particleCount: 4,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ["#ff4b72", "#ffe6e8", "#ffffff"],
+          });
+
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        })();
+      }
+
+      // 7. BACKGROUND HEARTS
+      const bgHearts = document.getElementById("bgHearts");
+      const heartSymbols = ["❤️", "💖", "💕", "💗", "✨", "🌸"];
+
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart-bg");
+        heart.innerText =
+          heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = Math.random() * 3 + 5 + "s";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        heart.style.fontSize = Math.random() * 16 + 14 + "px";
+        bgHearts.appendChild(heart);
+      }
+
+      // 8. THEME & MUSIC TOGGLE
+      function toggleTheme() {
+        document.body.classList.toggle("dark-mode");
+      }
+
+      const music = document.getElementById("bgMusic");
+      const musicBtn = document.getElementById("musicBtn");
+      let isPlaying = false;
+
+      function toggleMusic() {
+        if (isPlaying) {
+          music.pause();
+          musicBtn.innerText = "🎵";
+        } else {
+          music.play();
+          musicBtn.innerText = "⏸️";
+        }
+        isPlaying = !isPlaying;
+      }
+    </script>
+  </body>
+</html>
